@@ -23,11 +23,13 @@ public:
             j--;
         } 
 
-        for(int i = 0; i < arr.size(); i++){
-            if(arr[i] != revArr[i]){
-                return false;
-            }
-        }
-        return true;
+        // for(int i = 0; i < arr.size(); i++){
+        //     if(arr[i] != revArr[i]){
+        //         return false;
+        //     }
+        // }
+        // return true;
+
+        return (arr == revArr);
     }
 };
