@@ -10,21 +10,22 @@ private:
             return a[sortIndex] < b[sortIndex];
         });
 
-        int currentStart = rectangles[0][start];
-        int currentEnd = rectangles[0][end];
+        vector<vector<int>> ans;
         int intervals = 0;
 
-        for (const auto& rect : rectangles) {
-            if (rect[start] < currentEnd) {
-                currentEnd = max(rect[end], currentEnd);
-            } else {
-                intervals++;
-                currentStart = rect[start];
-                currentEnd = rect[end];
+        for(int i = 0; i < rectangles.size(); i++){
+            if(ans.empty() || rectangles[i][start] >= ans.back()[end]){
+                ans.push_back(rectangles[i]);
+
+                if(ans.size() > 1){
+                    intervals++;
+                }
+            }
+            else{
+                ans.back()[end] = max(ans.back()[end], rectangles[i][end]);
             }
         }
-        intervals++;
 
-        return intervals > 2;
+        return intervals > 1;
     }
 };
