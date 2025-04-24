@@ -12,13 +12,10 @@ public:
         int distinctElement = mp1.size();
 
         // Making subarrays with k distinct elements
-        int left = 0;
-        int distinctCount = 0;
-
-        for (int right = 0; right < nums.size(); ++right) {
+        for (int i = 0; i < nums.size(); ++i) {
             unordered_map<int, int> windowMap;
-            for (int i = right; i < nums.size(); i++) {
-                windowMap[nums[i]]++;
+            for (int j = i; j < nums.size(); j++) {
+                windowMap[nums[j]]++;
                 if (windowMap.size() == distinctElement) {
                     count++;
                 }
