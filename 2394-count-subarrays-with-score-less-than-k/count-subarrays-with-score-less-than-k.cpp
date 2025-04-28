@@ -15,7 +15,7 @@ public:
 
             long long sum = prefixSum[right] - (left > 0 ? prefixSum[left - 1]: 0);
 
-            // If the window is invalid
+            // If the window is invalid(Shrink the window)
             while(sum * length >= k && left <= right){
                 left++;
                 sum = prefixSum[right] - (left > 0 ? prefixSum[left - 1]: 0);
