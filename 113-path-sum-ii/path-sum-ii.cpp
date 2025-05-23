@@ -31,7 +31,7 @@ private:
         solve(root -> left, ans, targetSum, currPath);
         solve(root -> right, ans, targetSum, currPath);
 
-        currPath.pop_back();
+        // currPath.pop_back();
     }
 public:
     vector<vector<int>> pathSum(TreeNode* root, int targetSum) {
