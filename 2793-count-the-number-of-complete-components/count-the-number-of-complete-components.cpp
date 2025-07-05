@@ -1,45 +1,63 @@
 class Solution {
+private:
+    void bfs(int node, vector<vector<int>> &adj, vector<int> &vis, vector<int> &completeCompo){
+        vis[node] = 1;
+        queue<int> q;
+        q.push(node);
+
+        while(!q.empty()){
+            int front = q.front();
+            q.pop();
+            completeCompo.push_back(front);
+
+            for(auto it: adj[front]){
+                if(!vis[it]){
+                    vis[it] = 1;
+                    q.push(it);
+                }
+            }
+        }
+    }
 public:
     int countCompleteComponents(int n, vector<vector<int>>& edges) {
-        // adjacency lists for each vertex
-        vector<vector<int>> graph(n);
-        // map to store frequency of each unique adjacency list
-        unordered_map<string, int> componentFreq;
+        // Convert the adj matrix to adj list
+        vector<vector<int>> adj(n);
+        // for(int i = 0; i < n; i++){
+        //     for(int j = 0; j < n; j++){
+        //         if(edges[i][j] == 1 && (i != j)){
+        //             adj[i].push_back(j);
+        //             adj[j].push_back(i);
+        //         }
+        //     }
+        // }
 
-        // initialize adjacency lists with self-loops
-        for (int vertex = 0; vertex < n; vertex++) {
-            graph[vertex].push_back(vertex);
+        for(auto &edge : edges){
+            int u = edge[0];
+            int v = edge[1];
+            adj[u].push_back(v);
+            adj[v].push_back(u);
         }
 
-        // build adjacency lists from edges
-        for (const auto& edge : edges) {
-            graph[edge[0]].push_back(edge[1]);
-            graph[edge[1]].push_back(edge[0]);
-        }
+        vector<int> vis(n, 0);
+        int count = 0;
+        for(int i = 0; i < n; i++){
+            if(!vis[i]){
+                vector<int> completeCompo;
+                bfs(i, adj, vis, completeCompo);
+                bool isConnected = true;
+                for(auto it: completeCompo){
+                    if(adj[it].size() != completeCompo.size() - 1){
+                        isConnected = false;
+                        break;
+                    }
+                }
 
-        // count frequency of each unique adjacency pattern
-        for (int vertex = 0; vertex < n; vertex++) {
-            vector<int> neighbors = graph[vertex];
-            sort(neighbors.begin(), neighbors.end());
-
-            // convert vector to string for hashing
-            string key;
-            for (int num : neighbors) {
-                key += to_string(num) + ",";
+                if(isConnected){
+                    count++;
+                }
             }
-            componentFreq[key]++;
         }
 
-        // count complete components where size equals frequency
-        int completeCount = 0;
-        for (const auto& entry : componentFreq) {
-            // count commas to get original vector size
-            int size = count(entry.first.begin(), entry.first.end(), ',');
-            if (size == entry.second) {
-                completeCount++;
-            }
-        }
-
-        return completeCount;
+        return count;
     }
 };
