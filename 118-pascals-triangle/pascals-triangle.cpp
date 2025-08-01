@@ -2,10 +2,12 @@ class Solution {
 private:
     // Calculate the combination
     long long nCr(int n, int r) {
-        if (r > n)
+        if (r > n){
             return 0;
-        if (r > n - r)
+        }
+        if (r > n - r){
             r = n - r;
+        }
         long long res = 1;
         for (int i = 0; i < r; i++) {
             res *= (n - i);
