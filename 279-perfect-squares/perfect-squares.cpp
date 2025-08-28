@@ -19,8 +19,19 @@ private:
     }
 public:
     int numSquares(int n) {
-        vector<int> dp(n + 1, -1);
+        vector<int> dp(n + 1, 1e9);
 
-        return solve(n, dp);
+        dp[0] = 0;
+
+        for(int i = 1; i <= n; i++){
+            for(int j = 1; j * j <= i; j++){
+                int square = j * j;
+                int count = 1 + dp[i - square];
+                dp[i] = min(dp[i], count);
+            }
+        }
+
+        return dp[n];
+        // return solve(n, dp);
     }
 };
