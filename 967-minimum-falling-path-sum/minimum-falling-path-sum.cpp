@@ -27,29 +27,51 @@ public:
         int n = matrix.size();
         int minSum = INT_MAX;
 
-        vector<vector<int>> dp(n, vector<int>(n, 1e9));
+        vector<int> prev(n, 0), curr(n, 0);
 
-        // TABULATION
         for (int i = 0; i < n; i++) {
-            dp[0][i] = matrix[0][i];
+            prev[i] = matrix[0][i];
         }
 
         for (int i = 1; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 int way2 = INT_MAX, way3 = INT_MAX;
                 // directly up
-                int way1 = matrix[i][j] + dp[i-1][j];
+                int way1 = matrix[i][j] + prev[j];
                 // left diagonal
-                if(j > 0) way2 = matrix[i][j] + dp[i-1][j-1];
+                if(j > 0) way2 = matrix[i][j] + prev[j-1];
                 // Right diagonal
-                if(j < n-1) way3 = matrix[i][j] + dp[i-1][j+1];
+                if(j < n-1) way3 = matrix[i][j] + prev[j+1];
 
-                dp[i][j] = min(way1, min(way2, way3));
+                curr[j] = min(way1, min(way2, way3));
             }
+
+            prev = curr;
         }
 
+        // vector<vector<int>> dp(n, vector<int>(n, 1e9));
+
+        // TABULATION
+        // for (int i = 0; i < n; i++) {
+        //     dp[0][i] = matrix[0][i];
+        // }
+
+        // for (int i = 1; i < n; i++) {
+        //     for (int j = 0; j < n; j++) {
+        //         int way2 = INT_MAX, way3 = INT_MAX;
+        //         // directly up
+        //         int way1 = matrix[i][j] + dp[i-1][j];
+        //         // left diagonal
+        //         if(j > 0) way2 = matrix[i][j] + dp[i-1][j-1];
+        //         // Right diagonal
+        //         if(j < n-1) way3 = matrix[i][j] + dp[i-1][j+1];
+
+        //         dp[i][j] = min(way1, min(way2, way3));
+        //     }
+        // }
+
         for(int i = 0; i < n; i++){
-            minSum = min(minSum, dp[n-1][i]);
+            minSum = min(minSum, prev[i]);
         }
 
         return minSum;
