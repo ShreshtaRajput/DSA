@@ -18,7 +18,24 @@ private:
 public:
     int change(int amount, vector<int>& coins) {
         int n = coins.size();
-        vector<vector<int>> dp(amount + 1, vector<int>(n, -1));
-        return solve(amount, coins, 0, dp);
+        vector<vector<unsigned long long>> dp(amount + 1, vector<unsigned long long>(n+1, 0));
+
+        // TABULATION
+        for(int i = 0; i < n; i++){
+            dp[0][i] = 1;
+        }
+
+        for(int i = 1; i <= amount; i++){
+            for(int idx = n-1; idx >= 0; idx--){
+                unsigned long long take = 0;
+                if(i - coins[idx] >= 0) take = dp[i - coins[idx]][idx];
+                unsigned long long notTake = dp[i][idx + 1];
+
+                dp[i][idx] = take + notTake;
+            }
+        }
+
+        return dp[amount][0];
+        // return solve(amount, coins, 0, dp);
     }
 };
