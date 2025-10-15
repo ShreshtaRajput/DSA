@@ -26,8 +26,23 @@ public:
 
         int cnt = cuts.size();
 
-        vector<vector<int>> dp(cnt, vector<int>(cnt, -1));
+        vector<vector<int>> dp(cnt, vector<int>(cnt, 0));
 
-        return solve(cuts, 1, cnt - 2, dp);
+
+        // TABULALTION
+        for(int i = cnt - 2; i > 0; i--){
+            for(int j = i; j <= cnt - 2; j++){
+                int mini = 1e9;
+                for(int k = i; k <= j; k++){
+                    int cost = (cuts[j+1] - cuts[i-1]) + dp[i][k-1] + dp[k+1][j];
+                    mini = min(mini, cost);
+                }
+
+                dp[i][j] = mini;
+            }
+        }
+
+        return dp[1][cnt - 2];
+        // return solve(cuts, 1, cnt - 2, dp);
     }
 };
