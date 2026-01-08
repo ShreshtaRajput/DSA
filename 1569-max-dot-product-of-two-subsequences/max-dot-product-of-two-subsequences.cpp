@@ -21,8 +21,20 @@ public:
         int n = nums1.size();
         int m = nums2.size();
 
-        vector<vector<int>> dp(n, vector<int>(m, -1e9));
+        vector<vector<int>> dp(n+1, vector<int>(m+1, -1e9));
 
-        return solve(0, 0, n, m,nums1, nums2, dp);
+        for(int i = n-1; i >= 0; i--){
+            for(int j = m-1; j >= 0; j--){
+                int take = (nums1[i] * nums2[j]) + dp[i+1][j+1];
+                int skip1 = dp[i+1][j];
+                int skip2 = dp[i][j+1];
+                int stop = nums1[i] * nums2[j];
+
+                dp[i][j] = max(take, max(stop, max(skip1, skip2)));
+            }
+        }
+
+        return dp[0][0];
+        // return solve(0, 0, n, m,nums1, nums2, dp);
     }
 };
