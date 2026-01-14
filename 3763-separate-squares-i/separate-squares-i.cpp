@@ -1,34 +1,46 @@
 class Solution {
 public:
     double separateSquares(vector<vector<int>>& squares) {
-        double max_y = 0, total_area = 0;
-        for (auto& sq : squares) {
-            int y = sq[1], l = sq[2];
-            total_area += (double)l * l;
-            max_y = max(max_y, (double)(y + l));
+        // Calculating the total area
+        double totalArea = 0;
+        double low = INT_MIN;
+        double high = INT_MAX;
+        for(auto &square: squares){
+            double y = square[1];
+            double l = square[2];
+
+            totalArea += (l*l);
+            low = min(low, y);
+            high = max(high, y+l);
         }
 
-        auto check = [&](double limit_y) -> bool {
-            double area = 0;
-            for (auto& sq : squares) {
-                int y = sq[1], l = sq[2];
-                if (y < limit_y) {
-                    area += l * min(limit_y - y, (double)l);
+        double target = totalArea / 2;
+
+        double eps = 1e-6;
+        while(high - low > eps){
+            double mid = low + (high - low)/2;
+
+            double areaBelow = 0;
+            for(auto &square: squares){
+                double y = square[1];
+                double l = square[2];
+
+                if(mid <= y){   //The sqaure is completely above the mid line
+                    continue;   //No contribution to area below
+                }else if(mid >= y+l){   //The square is completely below the mid line
+                    areaBelow += l*l;
+                }else{      //Mid line cuts the square
+                    areaBelow += (mid - y) * l;
                 }
             }
-            return area >= total_area / 2;
-        };
 
-        double lo = 0, hi = max_y;
-        double eps = 1e-5;
-        while (abs(hi - lo) > eps) {
-            double mid = (hi + lo) / 2;
-            if (check(mid)) {
-                hi = mid;
-            } else {
-                lo = mid;
+            if(areaBelow < target){
+                low = mid;
+            }else{
+                high = mid;
             }
         }
-        return hi;
+
+        return low;
     }
 };
