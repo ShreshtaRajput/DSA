@@ -11,32 +11,32 @@
  */
 class Solution {
 private:
-    void dfs(TreeNode* root, int &res, string temp){
+    void dfs(TreeNode* root, int &res, int curr){
         if(!root){
             return;
         }
 
-        temp += (root -> val + '0');
+        curr = curr * 2 + root -> val;
 
         // If we reach the leaf node, our current path is complete
         // We can add that number to result
         if(root -> left == NULL && root -> right == NULL){
-            res += stoi(temp, NULL, 2);
+            res += curr;
         }
 
         if(root -> left){
-            dfs(root -> left, res, temp);
+            dfs(root -> left, res, curr);
         }
         if(root -> right){
-            dfs(root -> right, res, temp);
+            dfs(root -> right, res, curr);
         }
     }
 public:
     int sumRootToLeaf(TreeNode* root) {
         int res = 0;
-        string temp = "";
+        int curr = 0;
 
-        dfs(root, res, temp);
+        dfs(root, res, curr);
 
         return res;
     }
