@@ -14,15 +14,18 @@ public:
         while(s <= e){
             if(colors[s] != colors[e]){
                 res = max(res, abs(s - e));
+                break;
             }
 
             e--;
         }
-
+        
+        // Shift start pointer
         s = 0; e = n-1;
         while(s <= e){
             if(colors[s] != colors[e]){
                 res = max(res, abs(s-e));
+                break;
             }
 
             s++;
