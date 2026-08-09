@@ -13,13 +13,14 @@ private:
 
         int ans = 0;
         int stones = 0;
+
+        int totalRemaining = 0;
+        for(int j = index; j < n; j++){
+            totalRemaining += piles[j];
+        }
+
         for(int i = 1; i <= 2*m && index + i <= n; i++){
             stones += piles[index + i - 1];
-
-            int totalRemaining = 0;
-            for(int j = index; j < n; j++){
-                totalRemaining += piles[j];
-            }
 
             int opp = solve(index + i, max(m, i), piles, dp);
             ans = max(ans, totalRemaining - opp);
