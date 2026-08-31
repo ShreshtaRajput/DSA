@@ -15,16 +15,28 @@ public:
             return {-1, -1};
         }
 
-        vector<int> cps;
+        // vector<int> cps;
 
         int count = 2;
+        int firstcp = -1;
+        int prevcp = -1;
+        int minDist = INT_MAX;
+        int maxDist = INT_MIN;
+
         ListNode* prev = head;
         ListNode* curr = head -> next;
         while(curr -> next != NULL){
             // If it is a critical point
             if((curr -> val > curr -> next -> val && curr -> val > prev -> val) ||
             (curr -> val < curr -> next -> val && curr -> val < prev -> val)){
-                cps.push_back(count);
+                if(firstcp == -1){
+                    firstcp = count;
+                }else{
+                    minDist = min(minDist, count - prevcp);
+                    maxDist = count - firstcp;
+                }
+
+                prevcp = count;
             }
 
             count++;
@@ -32,15 +44,19 @@ public:
             curr = curr -> next;
         }
 
-        int n = cps.size();
-        if(cps.size() < 2){
-            return {-1, -1};
+        if(firstcp == -1 || firstcp == prevcp){
+            return {-1,-1};
         }
-        int maxDist = abs(cps[0] - cps[n-1]);
-        int minDist = INT_MAX;
-        for(int i = 0; i < n-1; i++){
-            minDist = min(minDist, abs(cps[i] - cps[i+1]));
-        }
+
+        // int n = cps.size();
+        // if(cps.size() < 2){
+        //     return {-1, -1};
+        // }
+        // int maxDist = abs(cps[0] - cps[n-1]);
+        // int minDist = INT_MAX;
+        // for(int i = 0; i < n-1; i++){
+        //     minDist = min(minDist, abs(cps[i] - cps[i+1]));
+        // }
 
         return {minDist, maxDist};
     }
